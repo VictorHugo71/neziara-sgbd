@@ -1,0 +1,672 @@
+Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-22
+    [avatar] => avatar02.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 16
+                    [rua] => Osvaldo Avilez
+                    [numero] => 305
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => casa
+                    [bairro] => Ponte Alta
+                    [principal] => 1
+                    [logradouro] => laranja
+                )
+
+        )
+
+)
+IDs no banco: Array
+(
+)
+
+IDs enviados: Array
+(
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-22
+    [avatar] => avatar01.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 16
+                    [rua] => Osvaldo Avilez
+                    [numero] => 305
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => casa
+                    [bairro] => Ponte Alta
+                    [principal] => 1
+                    [logradouro] => laranja
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 16
+)
+
+IDs enviados: Array
+(
+    [0] => 16
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar01.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 16
+                    [rua] => Osvaldo Avilez
+                    [numero] => 305
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => casa
+                    [bairro] => Ponte Alta
+                    [principal] => 1
+                    [logradouro] => laranja
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 16
+)
+
+IDs enviados: Array
+(
+    [0] => 16
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar01.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 16
+                    [rua] => Osvaldo Avilez
+                    [numero] => 305
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => casa
+                    [bairro] => Ponte Alta
+                    [principal] => 1
+                    [logradouro] => rosa
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 16
+)
+
+IDs enviados: Array
+(
+    [0] => 16
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar01.png
+    [endereco] => Array
+        (
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 16
+)
+
+IDs enviados: Array
+(
+)
+
+IDs para deletar: Array
+(
+    [0] => 16
+)
+
+Deletados 1 endereços.
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar01.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [rua] => azul manancial
+                    [numero] => 856
+                    [cidade] => ahegao
+                    [estado] => RJ
+                    [cep] => 07179-252
+                    [complemento] => casa
+                    [bairro] => Ponte tudo
+                    [principal] => 0
+                    [logradouro] => rosa
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+)
+
+IDs enviados: Array
+(
+    [0] => 19
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar01.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 19
+                    [rua] => azul manancial
+                    [numero] => 856
+                    [cidade] => ahegao
+                    [estado] => RJ
+                    [cep] => 07179-252
+                    [complemento] => casa
+                    [bairro] => Ponte tudo
+                    [principal] => 1
+                    [logradouro] => rosa
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 19
+)
+
+IDs enviados: Array
+(
+    [0] => 19
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar01.png
+    [endereco] => Array
+        (
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 19
+)
+
+IDs enviados: Array
+(
+)
+
+IDs para deletar: Array
+(
+    [0] => 19
+)
+
+Deletados 1 endereços.
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar05.png
+    [endereco] => Array
+        (
+        )
+
+)
+
+IDs no banco: Array
+(
+)
+
+IDs enviados: Array
+(
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar05.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [rua] => Osvaldo Avilez
+                    [numero] => 302
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => Casa
+                    [bairro] => Ponte Alta II
+                    [principal] => 0
+                    [logradouro] => azul
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar05.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 20
+                    [rua] => Osvaldo Avilez
+                    [numero] => 302
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => Casa
+                    [bairro] => Ponte Alta II
+                    [principal] => 1
+                    [logradouro] => azul
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 20
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar05.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 20
+                    [rua] => Osvaldo Avilez
+                    [numero] => 302
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => Casa
+                    [bairro] => Ponte Alta II
+                    [principal] => 1
+                    [logradouro] => azul
+                )
+
+            [1] => Array
+                (
+                    [rua] => 
+                    [numero] => 
+                    [cidade] => 
+                    [estado] => 
+                    [cep] => 
+                    [complemento] => 
+                    [bairro] => 
+                    [principal] => 0
+                    [logradouro] => 
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 20
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+    [1] => 21
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar05.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 20
+                    [rua] => Osvaldo Avilez
+                    [numero] => 302
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => Casa
+                    [bairro] => Ponte Alta II
+                    [principal] => 1
+                    [logradouro] => azul
+                )
+
+            [1] => Array
+                (
+                    [id_endereco] => 21
+                    [rua] => Trebinho abajur
+                    [numero] => 569
+                    [cidade] => jurariama
+                    [estado] => AC
+                    [cep] => 07179-252
+                    [complemento] => casa
+                    [bairro] => Piraraca
+                    [principal] => 0
+                    [logradouro] => jglfd
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 20
+    [1] => 21
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+    [1] => 21
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar05.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 20
+                    [rua] => Osvaldo Avilez
+                    [numero] => 302
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => Casa
+                    [bairro] => Ponte Alta II
+                    [principal] => 0
+                    [logradouro] => azul
+                )
+
+            [1] => Array
+                (
+                    [id_endereco] => 21
+                    [rua] => Trebinho abajur
+                    [numero] => 569
+                    [cidade] => jurariama
+                    [estado] => AC
+                    [cep] => 07179-252
+                    [complemento] => casa
+                    [bairro] => Piraraca
+                    [principal] => 1
+                    [logradouro] => jglfd
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 20
+    [1] => 21
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+    [1] => 21
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar05.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 20
+                    [rua] => Osvaldo Avilez
+                    [numero] => 302
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => Casa
+                    [bairro] => Ponte Alta II
+                    [principal] => 0
+                    [logradouro] => azul
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 20
+    [1] => 21
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+)
+
+IDs para deletar: Array
+(
+    [1] => 21
+)
+
+Deletados 1 endereços.
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar05.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 20
+                    [rua] => Osvaldo Avilez
+                    [numero] => 302
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => Casa
+                    [bairro] => Ponte Alta II
+                    [principal] => 1
+                    [logradouro] => azul
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 20
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+)
+
+IDs para deletar: Array
+(
+)
+

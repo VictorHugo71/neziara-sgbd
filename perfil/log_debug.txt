@@ -670,3 +670,97 @@ IDs para deletar: Array
 (
 )
 
+Dados recebidos: Array
+(
+    [id] => 24
+    [nome] => Paulo César Freitas Alves
+    [email] => paulogrande281@gmail.com
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.265-24
+    [avatar] => avatar04.png
+    [endereco] => Array
+        (
+        )
+
+)
+
+IDs no banco: Array
+(
+)
+
+IDs enviados: Array
+(
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 24
+    [nome] => Paulo César Freitas Alves
+    [email] => paulogrande281@gmail.com
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-24
+    [avatar] => avatar04.png
+    [endereco] => Array
+        (
+        )
+
+)
+
+IDs no banco: Array
+(
+)
+
+IDs enviados: Array
+(
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 24
+    [nome] => Paulo César Freitas Alves
+    [email] => paulogrande281@gmail.com
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar04.png
+    [endereco] => Array
+        (
+        )
+
+)
+
+Dados recebidos: Array
+(
+    [id] => 24
+    [nome] => Paulo César Freitas Alves
+    [email] => paulogrande281@gmail.com
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar04.png
+    [endereco] => Array
+        (
+        )
+
+)
+
+Dados recebidos: Array
+(
+    [id] => 24
+    [nome] => Paulo César Freitas Alves
+    [email] => paulogrande281@gmail.com
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar04.png
+    [endereco] => Array
+        (
+        )
+
+)
+

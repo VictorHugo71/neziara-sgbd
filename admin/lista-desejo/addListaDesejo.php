@@ -32,16 +32,34 @@
 
     if(is_numeric($Id_Cliente) && is_numeric($Id_Produto) && $Id_Cliente > 0 && $Id_Produto > 0) {
         try {
-            $stmt = $conn->prepare("INSERT INTO Carrinho (Id_Cliente, Id_Produto) VALUES (?, ?)");
-            $stmt->execute([$Id_Cliente, $Id_Produto]);
-            http_response_code(201);
-            echo json_encode(['mensagem' => 'Produto adicionado à lista de desejo com sucesso!']);
-            exit;
+            $stmtVerify = $conn->prepare("SELECT Id_Produto FROM Carrinho WHERE Id_Produto = ? AND Id_Cliente = ?");
+            $stmtVerify->execute([$Id_Produto, $Id_Cliente]);
+            $produtoCarrinho = $stmtVerify->rowCount();
+            
+            if(!$produtoCarrinho) {
+                try {
+                    $stmtInsert = $conn->prepare("INSERT INTO Carrinho (Id_Cliente, Id_Produto) VALUES (?, ?)");
+                    $stmtInsert->execute([$Id_Cliente, $Id_Produto]);
+                    http_response_code(201);
+                    echo json_encode(['mensagem' => 'Produto adicionado à lista de desejo com sucesso!']);
+                    exit;
+                } catch(PDOException $e) {
+                    http_response_code(500);
+                    echo json_encode(['mensagem' => 'Erro ao adicionar produto à lista de desejo: '. $e->getMessage()]);
+                    exit;
+                }
+            } else {
+                http_response_code(409);
+                echo json_encode(['mensagem' => 'Produto já adicionado à lista de desejo']);
+                exit;
+            }
         } catch(PDOException $e) {
             http_response_code(500);
-            echo json_encode(['mensagem' => 'Erro ao adicionar produto à lista de desejo: '. $e->getMessage()]);
+            echo json_encode(['mensagem' => 'Erro ao buscar produto: '. $e->getMessage()]);
             exit;
         }
+
+            
     } else {
         http_response_code(400);
         echo json_encode(['mensagem' => 'Dados do Produto ou Cliente inválidos ou ausentes.']);

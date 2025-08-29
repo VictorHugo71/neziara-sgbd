@@ -764,3 +764,59 @@ Dados recebidos: Array
 
 )
 
+Dados recebidos: Array
+(
+    [id] => 
+    [nome] => 
+    [email] => 
+    [telefone] => 
+    [cpf] => 
+    [avatar] => avatar01.png
+    [endereco] => Array
+        (
+        )
+
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar03.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 20
+                    [rua] => Osvaldo Avilez
+                    [numero] => 302
+                    [cidade] => Guarulhos
+                    [estado] => SP
+                    [cep] => 07179-300
+                    [complemento] => Casa
+                    [bairro] => Ponte Alta II
+                    [principal] => 1
+                    [logradouro] => azul
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 20
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+)
+
+IDs para deletar: Array
+(
+)
+

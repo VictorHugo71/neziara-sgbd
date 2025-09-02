@@ -34,7 +34,7 @@
 
     if(is_numeric($idCliente_parte) && is_numeric($idProduto_parte) && $idCliente_parte > 0 && $idProduto_parte > 0) {
         try {
-            $stmtDelete = $conn->prepare("DELETE FROM Carrinho WHERE Id_Cliente = ? AND Id_Produto = ?");
+            $stmtDelete = $conn->prepare("DELETE FROM Lista_Desejo WHERE Id_Cliente = ? AND Id_Produto = ?");
             $stmtDelete->execute([$idCliente_parte, $idProduto_parte]);
 
             http_response_code(200);

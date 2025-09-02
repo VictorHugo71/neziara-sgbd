@@ -32,7 +32,7 @@
 
     if(is_numeric($id_parte) && $id_parte > 0) {
         try {
-            $stmt = $conn->prepare("SELECT Produtos.Id_Produto, Nome_Produto, Preco, Imagem_Url FROM Produtos INNER JOIN Carrinho ON Produtos.Id_Produto = Carrinho.Id_Produto WHERE Id_Cliente = ?");
+            $stmt = $conn->prepare("SELECT Produtos.Id_Produto, Nome_Produto, Preco, Imagem_Url FROM Produtos INNER JOIN Lista_Desejo ON Produtos.Id_Produto = Lista_Desejo.Id_Produto WHERE Id_Cliente = ?");
             $stmt->execute([$id_parte]);
 
             $carrinho = $stmt->fetchAll(PDO::FETCH_ASSOC);

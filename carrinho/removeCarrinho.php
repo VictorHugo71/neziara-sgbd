@@ -25,4 +25,25 @@
         echo json_encode(['mensagem' => 'Erro ao conectar ao banco de dados']);
         exit;
     }
+
+    $idCliente = $_GET['Id_Cliente'];
+    $idProduto = $_GET['Id_Produto'];
+
+    if(isset($idCliente) && is_numeric($idCliente) && isset($idProduto) && is_numeric($idProduto)) {
+        try {
+            $stmtDelete = $conn->prepare("DELETE FROM Carrinho WHERE Id_Cliente = ? AND Id_Produto = ?");
+            $stmtDelete->execute([$idCliente, $idProduto]);
+
+            http_response_code(200);
+            echo json_encode(['mensagem' => 'Produto removido com sucesso']);
+        } catch(PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['mensagem' => 'Erro ao remover item do Carrinho'. $e->getMessage()]);
+            exit;
+        }
+    } else {
+        http_response_code(400);
+        echo json_encode(['mensagem' => 'Dados incompletos']);
+        exit;
+    }
 ?>

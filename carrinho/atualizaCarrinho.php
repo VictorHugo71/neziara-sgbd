@@ -26,5 +26,27 @@
         exit;
     }
 
+    $dados = json_decode(file_get_contents('php://input'), true);
     
+    $idCliente = $dados['Id_Cliente'];
+    $idProduto = $dados['Id_Produto'];
+    $quantidade = $dados['Quantidade'];
+
+    if(isset($idCliente) && isset($idProduto) && isset($quantidade) && is_numeric($idCliente) && is_numeric($idProduto) && is_numeric($quantidade)) {
+        try {
+            $stmtUpdate = $conn->prepare("UPDATE Carrinho SET Quantidade = ? WHERE Id_Cliente = ? AND Id_Produto = ? ");
+            $stmtUpdate->execute([$quantidade, $idCliente, $idProduto]);
+
+            http_response_code(200);
+            echo json_encode(['mensagem' => 'Quantidade do produto atualizada']);
+        } catch(PDOException $e) {
+            http_response_code(500);
+            echo json_encode(['mensagem' => 'Erro ao atualizar Carrinho'. $e->getMessage()]);
+            exit;
+        }
+    } else {
+        http_response_code(400);
+        echo json_encode(['mensagem' => 'Dados inválidos']);
+        exit;
+    }
 ?>

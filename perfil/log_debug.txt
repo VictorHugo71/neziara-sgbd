@@ -862,3 +862,87 @@ IDs para deletar: Array
 (
 )
 
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas 
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => 11 (945708748)
+    [cpf] => 525.118.628-23
+    [avatar] => avatar03.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 20
+                    [rua] => Rua
+                    [numero] => Numero
+                    [cidade] => Cidade
+                    [estado] => SP
+                    [cep] => CEP
+                    [complemento] => Complemento
+                    [bairro] => Bairro
+                    [principal] => 1
+                    [logradouro] => Logradouro
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 20
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+)
+
+IDs para deletar: Array
+(
+)
+
+Dados recebidos: Array
+(
+    [id] => 1
+    [nome] => Victor Hugo Freitas Dias
+    [email] => freitavitor@hotmail.com.br
+    [telefone] => DDD (X XXXX-XXXX)
+    [cpf] => XXX.XXX.XXX-XX
+    [avatar] => avatar03.png
+    [endereco] => Array
+        (
+            [0] => Array
+                (
+                    [id_endereco] => 20
+                    [rua] => Rua
+                    [numero] => Numero
+                    [cidade] => Cidade
+                    [estado] => SP
+                    [cep] => CEP
+                    [complemento] => Complemento
+                    [bairro] => Bairro
+                    [principal] => 1
+                    [logradouro] => Logradouro
+                )
+
+        )
+
+)
+
+IDs no banco: Array
+(
+    [0] => 20
+)
+
+IDs enviados: Array
+(
+    [0] => 20
+)
+
+IDs para deletar: Array
+(
+)
+

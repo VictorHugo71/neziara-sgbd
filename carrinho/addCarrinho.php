@@ -35,9 +35,10 @@
     if(isset($Id_Cliente) && isset($Id_Produto) && isset($Quantidade) && is_numeric($Id_Cliente) && is_numeric($Id_Produto) && is_numeric($Quantidade) && $Id_Cliente > 0 && $Id_Produto > 0 && $Quantidade > 0) {
         try {
             $stmtConsulta = $conn->prepare("SELECT Id_Produto FROM Carrinho WHERE Id_Produto = ? AND Id_Cliente = ?");
+            //fazer logica de consulta/comparação de estoque com a quantidade de produtos no carrinho para saber o que fazer
             $stmtConsulta->execute([$Id_Produto, $Id_Cliente]);
             $itemNoCarrinho = $stmtConsulta->fetch(PDO::FETCH_ASSOC);
-
+            
             if(!$itemNoCarrinho) {
                 $stmtInsert = $conn->prepare("INSERT INTO Carrinho (Id_Cliente, Id_Produto, Quantidade) VALUES (?, ?, ?)");
                 $stmtInsert->execute([$Id_Cliente, $Id_Produto, $Quantidade]);

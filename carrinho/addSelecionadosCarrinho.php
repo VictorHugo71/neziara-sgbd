@@ -47,6 +47,7 @@
             }
 
             $stmtConsulta = $conn->prepare("SELECT Id_Produto FROM Carrinho WHERE Id_Produto = ? AND Id_Cliente = ?");
+            //fazer logica de consulta/comparação de estoque com a quantidade de produtos no carrinho para saber o que fazer
             $stmtConsulta->execute([$idProduto, $idCliente]);
             $itemNoCarrinho = $stmtConsulta->fetch(PDO::FETCH_ASSOC);
 

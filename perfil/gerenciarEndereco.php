@@ -92,6 +92,25 @@
         }
     }
 
+    $enderecoPrincipalEnviado = false;
+    foreach ($enderecosDados as $end) {
+        if (isset($end['Principal']) && (int)$end['Principal'] === 1) {
+            $enderecoPrincipalEnviado = true;
+            // Capturamos o ID do endereço que DEVE ser o principal
+            $idEnderecoPrincipal = isset($end['Id_Endereco']) ? (int)trim($end['Id_Endereco']) : $conn->lastInsertId();
+            break; 
+        }
+    }
+
+    if($enderecoPrincipalEnviado) {
+        try {
+            $stmtUnicidade = $conn->prepare("UPDATE Enderecos SET Pricipal = 0 WHERE Cliente_Id = ? AND Id_Endereco != ?");
+            $stmtUnicidade->execute([$idCliente, $idEnderecoPrincipal]);
+        } catch(PDOException $e) {
+            error_log("Falha na unicidade Principal: " . $e->getMessage());
+        }
+    }
+
     $idsMantidosString = empty($idsMantidos) ? '-1' : implode(',', $idsMantidos);
 
     try {

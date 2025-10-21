@@ -26,5 +26,49 @@
         exit;
     }
 
-    
+    $dados = json_decode(file_get_contents("php://:input"));
+
+    if(!isset($dados->enderecoEnvio->idEndereco) || !isset($dados->enderecoEnvio->idCliente) || 
+        !isset($dados->usuarioMP->idCliente) || !isset($dados->usuarioMP->emailCliente) || 
+        !isset($dados->itens) || !is_array($dados->itens) || count($dados->itens) === 0 ||
+        !isset($dados->pagamentoMP->metodoPagamento) || !isset($dados->pagamentoMP->valorTotal)
+    ) {
+        http_response_code(400);
+        echo json_encode(['mensagem' => 'Dados incompletos']);
+        exit;
+    }
+
+    $idEndereco = $dados->enderecoEnvio->idEndereco;
+    $estado = $dados->enderecoEnvio->estado;
+    $cidade = $dados->enderecoEnvio->cidade;
+    $bairro = $dados->enderecoEnvio->bairro;
+    $logradouro = $dados->enderecoEnvio->logradouro;
+    $complemento = $dados->enderecoEnvio->complemento;
+    $numero = $dados->enderecoEnvio->numero;
+    $cep = $dados->enderecoEnvio->cep;
+
+    $idCliente = $dados->usuarioMP->idCliente;
+    $emailCliente = $dados->usuarioMP->emailCliente;
+    $telefoneCliente = $dados->usuarioMP->telefoneCliente;
+
+    $metodoPagamento = $dados->pagamentoMP->metodoPagamento;
+    $valorTotal = $dados->pagamentoMP->valorTotal;
+
+    try{
+        $stmtPedido = $conn->prepare("INSERT INTO Pedidos (Id_Cliente, Email_Pedido, Telefone_Pedido, Estado_Pedido, Cidade_Pedido, Bairro_Pedido, Logradouro_Pedido, Complemento_Pedido, Cep_Pedido, Numero_Pedido, Metodo_Pagamento, Valor_Total, Status_Pedido) 
+        VALUES ()");
+    } catch(PDOException $e) {
+        http_response_code(500);
+        echo json_encode(['mensagem' => 'Erro ao processar o pedido', $e->getMessage()]);
+        exit;
+    }
+
+
+    foreach($dados->itens as $item) {
+        if(!isset($item->idProduto) || !isset($item->quantidade) || !isset($item->precoUnitario)) {
+            http_response_code(400);
+            echo json_encode(['mensagem' => 'Dados do item incompletos']);
+            exit;
+        }
+    }
 ?>

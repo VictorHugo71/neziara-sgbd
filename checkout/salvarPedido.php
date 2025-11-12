@@ -26,15 +26,55 @@
         exit;
     }
 
-    $dados = json_decode(file_get_contents("php://:input"));
+    $dados = json_decode(file_get_contents("php://input"));
 
-    if(!isset($dados->enderecoEnvio->idEndereco) || !isset($dados->enderecoEnvio->idCliente) || 
-        !isset($dados->usuarioMP->idCliente) || !isset($dados->usuarioMP->emailCliente) || 
-        !isset($dados->itens) || !is_array($dados->itens) || count($dados->itens) === 0 ||
-        !isset($dados->pagamentoMP->metodoPagamento) || !isset($dados->pagamentoMP->valorTotal)
-    ) {
+    $chaves_superiores = [
+        'idCliente', 
+        'emailCliente',
+        'telefoneCliente',
+        'valorTotal',
+        'metodoPagamento',
+        'itens'
+    ];
+
+    $endereco = null;
+
+    $chaves_endereco = [
+        'estado',
+        'cidade',
+        'bairro',
+        'logradouro',
+        'cep',
+        'complemento',
+        'numero'
+    ];
+
+    $erro_validacao = false;
+
+    foreach($chaves_superiores as $chave) {
+        if(!isset($dados->{$chave})) {
+            $erro_validacao = true;
+            break;
+        }
+    }
+
+    if(!$erro_validacao && (!is_array($dados->itens) || count($dados->itens) === 0)) {
+        $erro_validacao = true;
+    }
+
+    if(!$erro_validacao && isset($dados->enderecoEnvio)) {
+        $endereco = $dados->enderecoEnvio;
+        foreach($chaves_endereco as $chave) {
+            if(!isset($endereco->{$chave})) {
+                $erro_validacao = true;
+                break;
+            }
+        }
+    }
+
+    if($erro_validacao) {
         http_response_code(400);
-        echo json_encode(['mensagem' => 'Dados incompletos']);
+        echo json_encode(['mensagem' => 'Dados incompletos ou inválidos']);
         exit;
     }
 
@@ -47,28 +87,49 @@
     $numero = $dados->enderecoEnvio->numero;
     $cep = $dados->enderecoEnvio->cep;
 
-    $idCliente = $dados->usuarioMP->idCliente;
-    $emailCliente = $dados->usuarioMP->emailCliente;
-    $telefoneCliente = $dados->usuarioMP->telefoneCliente;
+    $idCliente = $dados->idCliente;
+    $emailCliente = $dados->emailCliente;
+    $telefoneCliente = $dados->telefoneCliente;
 
-    $metodoPagamento = $dados->pagamentoMP->metodoPagamento;
-    $valorTotal = $dados->pagamentoMP->valorTotal;
+    $metodoPagamento = $dados->metodoPagamento;
+    $valorTotal = $dados->valorTotal;
 
     try{
-        $stmtPedido = $conn->prepare("INSERT INTO Pedidos (Id_Cliente, Email_Pedido, Telefone_Pedido, Estado_Pedido, Cidade_Pedido, Bairro_Pedido, Logradouro_Pedido, Complemento_Pedido, Cep_Pedido, Numero_Pedido, Metodo_Pagamento, Valor_Total, Status_Pedido) 
-        VALUES ()");
+        $conn->beginTransaction();
+
+        $stmtPedido = $conn->prepare("INSERT INTO Pedidos (Id_Cliente, Email_Pedido, Telefone_Pedido, Estado_Pedido, Cidade_Pedido, Bairro_Pedido, Logradouro_Pedido, Complemento_Pedido, Cep_Pedido, Numero_Pedido, Metodo_Pagamento, Valor_Total, Data_Pedido, Status_Pedido)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), 'Pendente')");
+        $stmtPedido->execute([
+            $idCliente, $emailCliente, $telefoneCliente, $estado, $cidade, $bairro, $logradouro, 
+            $complemento, $cep, $numero, $metodoPagamento, $valorTotal
+        ]);
+
+        $idPedido = $conn->lastInsertId();
+
+        foreach($dados->itens as $item) {
+            if(!isset($item->idProduto) || !isset($item->quantidade) || !isset($item->precoUnitario)) {
+                http_response_code(400);
+                echo json_encode(['mensagem' => 'Dados do item incompletos']);
+                exit;
+            }
+
+            $idProduto = $item->Id_Produto;
+            $quantidade = $item->Quantidade;
+            $precoUnitario = $item->Preco_Unitario;
+
+            $stmtItem = $conn->prepare("INSERT INTO Itens_Pedido (Id_Pedido, Id_Produto, Quantidade_Item, Preco_Unitario) VALUES (?, ?, ?, ?)");
+            $stmtItem->execute([$idPedido, $idProduto, $quantidade, $precoUnitario]);
+        }
+        $conn->commit();
+        
+        http_response_code(201);
+        echo json_encode(['mensagem' => 'Pedido realizado com sucesso', 'Id_Pedido' => (int)$idPedido]);
     } catch(PDOException $e) {
+        if ($conn->inTransaction()) {
+            $conn->rollBack(); 
+        }
         http_response_code(500);
         echo json_encode(['mensagem' => 'Erro ao processar o pedido', $e->getMessage()]);
         exit;
-    }
-
-
-    foreach($dados->itens as $item) {
-        if(!isset($item->idProduto) || !isset($item->quantidade) || !isset($item->precoUnitario)) {
-            http_response_code(400);
-            echo json_encode(['mensagem' => 'Dados do item incompletos']);
-            exit;
-        }
     }
 ?>

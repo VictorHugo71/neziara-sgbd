@@ -34,7 +34,8 @@
         'telefoneCliente',
         'valorTotal',
         'metodoPagamento',
-        'itens'
+        'itens',
+        'nomeCliente'
     ];
 
     $endereco = null;
@@ -90,6 +91,7 @@
     $idCliente = $dados->idCliente;
     $emailCliente = $dados->emailCliente;
     $telefoneCliente = $dados->telefoneCliente;
+    $nomePedido = $dados->nomeCliente;
 
     $metodoPagamento = $dados->metodoPagamento;
     $valorTotal = $dados->valorTotal;
@@ -97,17 +99,17 @@
     try{
         $conn->beginTransaction();
 
-        $stmtPedido = $conn->prepare("INSERT INTO Pedidos (Id_Cliente, Email_Pedido, Telefone_Pedido, Estado_Pedido, Cidade_Pedido, Bairro_Pedido, Logradouro_Pedido, Complemento_Pedido, Cep_Pedido, Numero_Pedido, Metodo_Pagamento, Valor_Total, Data_Pedido, Status_Pedido)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), 'Pendente')");
+        $stmtPedido = $conn->prepare("INSERT INTO Pedidos (Id_Cliente, Email_Pedido, Telefone_Pedido, Estado_Pedido, Cidade_Pedido, Bairro_Pedido, Logradouro_Pedido, Complemento_Pedido, Cep_Pedido, Numero_Pedido, Metodo_Pagamento, Valor_Total, Data_Pedido, Status_Pedido, Nome_Pedido)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), 'Pendente', ?)");
         $stmtPedido->execute([
             $idCliente, $emailCliente, $telefoneCliente, $estado, $cidade, $bairro, $logradouro, 
-            $complemento, $cep, $numero, $metodoPagamento, $valorTotal
+            $complemento, $cep, $numero, $metodoPagamento, $valorTotal, $nomePedido
         ]);
 
         $idPedido = $conn->lastInsertId();
 
         foreach($dados->itens as $item) {
-            if(!isset($item->idProduto) || !isset($item->quantidade) || !isset($item->precoUnitario)) {
+            if(!isset($item->Id_Produto) || !isset($item->Quantidade) || !isset($item->Preco_Unitario)) {
                 http_response_code(400);
                 echo json_encode(['mensagem' => 'Dados do item incompletos']);
                 exit;
@@ -117,7 +119,7 @@
             $quantidade = $item->Quantidade;
             $precoUnitario = $item->Preco_Unitario;
 
-            $stmtItem = $conn->prepare("INSERT INTO Itens_Pedido (Id_Pedido, Id_Produto, Quantidade_Item, Preco_Unitario) VALUES (?, ?, ?, ?)");
+            $stmtItem = $conn->prepare("INSERT INTO Itens_Pedido (Id_Pedido, Id_Produto, Quantidade, Preco_Unitario) VALUES (?, ?, ?, ?)");
             $stmtItem->execute([$idPedido, $idProduto, $quantidade, $precoUnitario]);
         }
         $conn->commit();

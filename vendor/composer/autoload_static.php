@@ -23,6 +23,10 @@ class ComposerStaticInit20fad51902f91e7fd3039e016a6556b5
         array (
             'PhpOption\\' => 10,
         ),
+        'M' => 
+        array (
+            'MercadoPago\\' => 12,
+        ),
         'G' => 
         array (
             'GrahamCampbell\\ResultType\\' => 26,
@@ -53,6 +57,10 @@ class ComposerStaticInit20fad51902f91e7fd3039e016a6556b5
         'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
+        ),
+        'MercadoPago\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/mercadopago/dx-php/src/MercadoPago',
         ),
         'GrahamCampbell\\ResultType\\' => 
         array (

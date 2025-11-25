@@ -40,7 +40,7 @@
     try {
         $stmt = $conn->prepare("
             SELECT 
-                ped.Valor_Total, cli.Email, cli.Nome, ipe.Id_Produto, 
+                ped.Valor_Total, cli.Email, cli.Nome, cli.Telefone, ipe.Id_Produto, 
                 ipe.Preco_Unitario, ipe.Quantidade, prod.Nome_Produto
             FROM  
                 Pedidos ped
@@ -89,12 +89,12 @@
         ];
     }
 
-    use MercadoPago\Client\Preferencce\PreferenceClient;
+    use MercadoPago\Client\Preference\PreferenceClient;
     use MercadoPago\MercadoPagoConfig;
 
-    $ACESS_TOKEN = $_ENV['ACESS_TOKEN_MP'];
+    $ACCESS_TOKEN = $_ENV['ACESS_TOKEN_MP'];
 
-    MercadoPagoConfig::setAccessToken($ACESS_TOKEN);
+    MercadoPagoConfig::setAccessToken($ACCESS_TOKEN);
 
     $preferenceClient = new PreferenceClient();
 
@@ -109,20 +109,20 @@
             ]
         ],
         'back_urls' => [
-            'sucess' => 'http://localhost:4200/checkout/sucesso',
-            'pending' => 'http://localhost:4200/checkout/falha',
-            'failure' => 'http://localhost:4200/checkout/pendente',
+            'success' => 'http://localhost:4200/checkout/sucesso',
+            'pending' => 'http://localhost:4200/checkout/pendente',
+            'failure' => 'http://localhost:4200/checkout/falha',
         ],
 
         'auto_return' => 'approved',
 
-        'external_return' => (string)$idPedido,
+        'external_reference' => (string)$idPedido,
 
         'notification_url' => '',
     ];
 
     try {
-        $preference = $preferenceClient->create($preference_data);
+        $preference = $preferenceClient->create($preferenceData);
 
         http_response_code(200);
         echo json_encode([
@@ -132,7 +132,7 @@
         ]);
     } catch(\Exception $e) {
         http_response_code(500);
-        echo_json_encode([
+        echo json_encode([
             'mensagem' => 'Erro interno ao comunicaar com o Mercadoo Pago.',
             'detalhes' => $e->getMessage()
         ]);

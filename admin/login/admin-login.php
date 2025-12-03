@@ -15,7 +15,7 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 use Firebase\JWT\JWT;
 
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
-$dotenv->load();
+$dotenv->safeLoad();
 
 // Acessa a chave do arquivo .env
 $key = $_ENV['JWT_SECRET'];

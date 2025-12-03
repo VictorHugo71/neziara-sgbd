@@ -125,7 +125,7 @@
         $conn->commit();
         
         http_response_code(201);
-        echo json_encode(['mensagem' => 'Pedido realizado com sucesso', 'Id_Pedido' => (int)$idPedido]);
+        echo json_encode(['mensagem' => 'Pedido realizado com sucesso', 'idPedidoInterno' => (int)$idPedido]);
     } catch(PDOException $e) {
         if ($conn->inTransaction()) {
             $conn->rollBack(); 

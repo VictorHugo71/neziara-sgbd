@@ -22,6 +22,7 @@ class ComposerStaticInit20fad51902f91e7fd3039e016a6556b5
         'P' => 
         array (
             'PhpOption\\' => 10,
+            'PHPMailer\\PHPMailer\\' => 20,
         ),
         'M' => 
         array (
@@ -57,6 +58,10 @@ class ComposerStaticInit20fad51902f91e7fd3039e016a6556b5
         'PhpOption\\' => 
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
         ),
         'MercadoPago\\' => 
         array (

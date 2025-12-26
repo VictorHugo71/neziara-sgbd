@@ -100,6 +100,9 @@
 
         $conn->commit();
         echo json_encode(['mensagem' => $mensagemFinal, 'detalhe' => $statusFinal]);
+
+        //Envio de email (simulado)
+        
     } catch(PDOException $e) {
         http_response_code(500);
         $conn->rollBack();

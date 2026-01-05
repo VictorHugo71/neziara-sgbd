@@ -98,20 +98,44 @@
 
     try {
         $conn->beginTransaction();
-        if(in_array($numero_cartao, $cartoesAprovados)) {
-            $statusFinal = 'aprovado';
-            $mensagemFinal =  'Pagamento aprovado';
-        } else if(in_array($numero_cartao, $cartoesRecusados)) {
-            $statusFinal = 'cancelado';
-            $mensagemFinal =  'Pagamento recusado/cancelado';
-        } else if(in_array($numero_cartao, $cartoesSemSaldo)) {
-            $statusFinal = 'cancelado';
-            $mensagemFinal =  'Cartão Não Possui Saldo Disponível';
-        } else {
-            $statusFinal = 'pendente';
-            $mensagemFinal =  'Cartão não cadastrado na base de testes';
-        }
+        $stmtSelect = $conn->prepare("
+            SELECT 
+                ped.Valor_Total, cli.Email, cli.Nome, cli.Telefone, ipe.Id_Produto, 
+                ipe.Preco_Unitario, ipe.Quantidade, prod.Nome_Produto,
+                ped.Cep_Pedido, ped.Logradouro_Pedido, ped.Numero_Pedido, ped.Complemento_Pedido
+            FROM  
+                Pedidos ped
+            JOIN
+                Clientes cli ON ped.Id_Cliente = cli.Id_Cliente
+            JOIN
+                Itens_Pedido ipe ON ped.Id_Pedido = ipe.Id_Pedido
+            JOIN
+                Produtos prod ON ipe.Id_Produto = prod.Id_Produto
+            WHERE
+                ped.Id_Pedido = ?");
 
+        $stmt->execute([$idPedido]);
+        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        if(!$resultados) {
+            http_response_code(404);
+            echo json_encode(['mensagem' => 'Pedido não encontrado ou sem itens']);
+            exit;
+        } else {
+            if(in_array($numero_cartao, $cartoesAprovados)) {
+                $statusFinal = 'aprovado';
+                $mensagemFinal =  'Pagamento aprovado';
+            } else if(in_array($numero_cartao, $cartoesRecusados)) {
+                $statusFinal = 'cancelado';
+                $mensagemFinal =  'Pagamento recusado/cancelado';
+            } else if(in_array($numero_cartao, $cartoesSemSaldo)) {
+                $statusFinal = 'cancelado';
+                $mensagemFinal =  'Cartão Não Possui Saldo Disponível';
+            } else {
+                $statusFinal = 'pendente';
+                $mensagemFinal =  'Cartão não cadastrado na base de testes';
+            }
+        }
         unset($numero_cartao);
 
         $stmt = $conn->prepare("UPDATE Pedidos SET Status_Pedido = ? WHERE Id_Pedido = ?");
@@ -181,7 +205,7 @@
             $mail->send();
             $infoEmail = 'Mensagem enviada com sucesso!';
         } catch (Exception $e) {
-            $infoEmail = "A mensagem não pôde ser enviada. Erro do Mailer: {$mail->ErrorInfo}";
+            $infoEmail = "A mensagem não pôde ser enviada. Erro no Servidor: {$mail->ErrorInfo}";
         }
 
         echo json_encode([

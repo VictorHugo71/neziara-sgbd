@@ -45,12 +45,11 @@
 
     $dados = json_decode(file_get_contents('php://input'), true);
     $idPedido = $dados['idPedido'];
-    $numero_cartao = $dados['numero_cartao'];
-    $cvv = $dados['cvv'];
-    $data_validade = $dados['data_validade'];
+    $numero_cartao = $dados['cartao']['numeroCartao'];
+    $cvv = $dados['cartao']['cvv'];
+    $data_validade = $dados['cartao']['dataValidade'];
     $email_cliente = $dados['email'];
 
-    
     if(!isset($idPedido) || !isset($numero_cartao) || !isset($cvv) || !isset($data_validade) || !isset($email_cliente)) {
         http_response_code(400);
         echo json_encode(['mensagem' => 'Dados incompletos']);
@@ -82,7 +81,7 @@
     $dateFormExplode = explode('/', $dateForm);
     $mesServer = intval($dateFormExplode[0]);
     $anoServer = intval($dateFormExplode[1]);
-    
+
     if(!preg_match('#^[0-9]{2}/[0-9]{4}$#', $data_validade) || $anoCliente < $anoServer || $anoCliente == $anoServer && $mesCliente < $mesServer || $mesCliente > 12) {
         http_response_code(400);
         echo json_encode(['mensagem' => 'Data de validade inválida ou cartão expirado']);
@@ -96,7 +95,7 @@
     $cartoesRecusados = explode(',', $_ENV['CARTOES_TESTE_CANCELADOS']);
     $cartoesSemSaldo = explode(',', $_ENV['CARTOES_TESTE_SALDO_INSUFICIENTE']);
 
-    try {
+        try {
         $conn->beginTransaction();
         $stmtSelect = $conn->prepare("
             SELECT 
@@ -114,8 +113,8 @@
             WHERE
                 ped.Id_Pedido = ?");
 
-        $stmt->execute([$idPedido]);
-        $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmtSelect->execute([$idPedido]);
+        $resultados = $stmtSelect->fetchAll(PDO::FETCH_ASSOC);
 
         if(!$resultados) {
             http_response_code(404);
@@ -137,6 +136,8 @@
             }
         }
         unset($numero_cartao);
+        unset($cvv);
+        unset($data_validade);
 
         $stmt = $conn->prepare("UPDATE Pedidos SET Status_Pedido = ? WHERE Id_Pedido = ?");
         $stmt->execute([$statusFinal, $idPedido]);
@@ -211,7 +212,12 @@
         echo json_encode([
             'mensagem' => $mensagemFinal,
             'status' => $statusFinal,
-            'info_email' => $infoEmail
+            'info_email' => $infoEmail,
+            'idPedido' => $idPedido,
+            'numero_cartao' => $numero_cartao ?? 'dados apagado',
+            'cvv' => $cvv ?? 'dados apagado',
+            'data_validade' => $data_validade ?? 'dados apagado'
+
         ]);
         
     } catch(PDOException $e) {

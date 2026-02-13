@@ -1,10 +1,17 @@
 <?php
-// Permite requisições de qualquer origem
-header("Access-Control-Allow-Origin: *");
 // Permite os métodos HTTP
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 // Permite os cabeçalhos de conteúdo, como o Content-Type
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Enquanto estiver desenvolvendo em localhost
+$allowed_origins = ['http://localhost:4200']; // Porta do Angular
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);
@@ -21,10 +28,14 @@ $dotenv->load();
 $key = $_ENV['JWT_SECRET'];
 
 // Área de Conexão com o Banco de Dados //
-$servername = "localhost";
-$username = "root";
-$password = "";
-$database = "E-commerce";
+$servername = $_ENV['DB_HOST'];
+$username = $_ENV['DB_USER'];
+$password = $_ENV['DB_PASS'];
+$database = $_ENV['DB_NAME'];
+
+if (!preg_match('/^[a-zA-Z0-9_-]+$/', $database)) {
+    die('Nome de banco inválido');
+}
 
 try {
     $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
@@ -46,6 +57,12 @@ if (!isset($dados['email'], $dados['senha']) || empty($dados['email']) || empty(
 $email = trim($dados['email']);
 $senha = $dados['senha'];
 
+if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    http_response_code(400);
+    echo json_encode(['mensagem' => 'E-mail inválido']);
+    exit;
+}
+
 try {
     $stmt = $conn->prepare("SELECT Id_Cliente, Nome, Senha FROM Clientes WHERE Email = ?");
     $stmt->execute([$email]);
@@ -56,7 +73,7 @@ try {
             'iss' => 'http://localhost',
             'aud' => 'http://localhost',
             'iat' => time(),
-            'exp' => time() + (3600 * 24),
+            'exp' => time() + (60 * 15),
             'data' => [
                 'id' => $cliente['Id_Cliente'],
                 'nome' => $cliente['Nome'],
@@ -79,6 +96,13 @@ try {
 
 } catch (PDOException $e) {
     http_response_code(500);
-    echo json_encode(['mensagem' => 'Erro no servidor: ' . $e->getMessage()]);
+    if ($_ENV['APP_ENV'] === 'development') {
+        echo json_encode(['mensagem' => 'Erro no servidor: ' . $e->getMessage()]);
+        //Em desenvolvimento exponha detalhes para facilitar a depuração
+    } else {
+        echo json_encode(['mensagem' => 'Erro no servidor. Por favor, tente novamente mais tarde.']);
+        //Erro no log para análise posterior, sem expor detalhes ao usuário
+        error_log($e->getMessage());
+    }
 }
-?>
+?>  

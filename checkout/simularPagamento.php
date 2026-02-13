@@ -214,11 +214,7 @@
             'status' => $statusFinal,
             'info_email' => $infoEmail,
             'idPedido' => $idPedido,
-            'numero_cartao' => $numero_cartao ?? 'dados apagado',
-            'cvv' => $cvv ?? 'dados apagado',
-            'data_validade' => $data_validade ?? 'dados apagado'
-
-        ]);
+                 ]);
         
     } catch(PDOException $e) {
         http_response_code(500);

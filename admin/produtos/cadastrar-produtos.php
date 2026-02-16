@@ -1,8 +1,16 @@
 <?php
-    header("Access-Control-Allow-Origin: *");
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
     header("Access-Control-Allow-Headers: Content-Type, Authorization");
     header("Content-Type: application/json; charset=UTF-8");
+
+    // Enquanto estiver desenvolvendo em localhost
+    $allowed_origins = ['http://localhost:4200']; // Porta do Angular
+
+    $origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+    if (in_array($origin, $allowed_origins)) {
+        header("Access-Control-Allow-Origin: $origin");
+    }
 
     if($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
         http_response_code(200);

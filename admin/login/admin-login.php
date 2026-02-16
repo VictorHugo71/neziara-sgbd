@@ -1,10 +1,18 @@
 <?php
-// Permite requisições de qualquer origem
-header("Access-Control-Allow-Origin: *");
+
 // Permite os métodos HTTP
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 // Permite os cabeçalhos de conteúdo, como o Content-Type
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Enquanto estiver desenvolvendo em localhost
+$allowed_origins = ['http://localhost:4200']; // Porta do Angular
+
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
+
+if (in_array($origin, $allowed_origins)) {
+    header("Access-Control-Allow-Origin: $origin");
+}
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(200);

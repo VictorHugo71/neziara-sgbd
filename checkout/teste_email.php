@@ -3,26 +3,26 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
-// 1. O Autoload do Composer é o que carrega o PHPMailer automaticamente
-require '../vendor/autoload.php';
+    // 1. O Autoload do Composer é o que carrega o PHPMailer automaticamente
+    require '../vendor/autoload.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+    use PHPMailer\PHPMailer\PHPMailer;
+    use PHPMailer\PHPMailer\Exception;
 
-// 2. Importa a classe do Dotenv
-use Dotenv\Dotenv;
+    // 2. Importa a classe do Dotenv
+    use Dotenv\Dotenv;
 
-// 3. Indica onde está o arquivo .env (neste caso, na mesma pasta do script)
-$dotenv = Dotenv::createImmutable(__DIR__ . '/..');
-$dotenv->safeLoad();
+    // 3. Indica onde está o arquivo .env (neste caso, na mesma pasta do script)
+    $dotenv = Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv->safeLoad();
 
-$mail = new PHPMailer(true); // O 'true' habilita as exceções (erros detalhados)
+    $mail = new PHPMailer(true); // O 'true' habilita as exceções (erros detalhados)
 
-$mensagemFinal = 'Cartão não cadastrado para teste';
-$idPedido = 12345;
-$statusFinal = 'Pendente'; // ou 'cancelado'
+    $mensagemFinal = 'Cartão não cadastrado para teste';
+    $idPedido = 12345;
+    $statusFinal = 'Pendente'; // ou 'cancelado'
 
-$infoEmail = 'Não enviado';
+    $infoEmail = 'Não enviado';
         try {
             // Define uma cor para o título baseada no status
             $corTitulo = '#333333'; // Cor padrão (Cinza escuro)

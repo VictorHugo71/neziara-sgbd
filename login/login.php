@@ -65,22 +65,26 @@
 
     try {
         //Adicionar verificação de Ip no futuro
-        $stmtBloqueado = $conn->prepare("SELECT Email, Bloqueado_Ate FROM Tentativas_Login WHERE Email = ?");
+        $stmtBloqueado = $conn->prepare("SELECT 1 FROM Tentativas_Login WHERE Email = ? AND Bloqueado_Ate > NOW()");
         $stmtBloqueado->execute([$email]);
         $tentativa = $stmtBloqueado->fetch(PDO::FETCH_ASSOC);
 
-        if($tentativa && $tentativa['Bloqueado_Ate'] > data ('Y-m-d H:i:s')) {
-            http_response_code(429);//Perguntar para o Claude(Reishia) sobre essa parte do codigo de data
+        if($tentativa) {
+            http_response_code(429);
             echo json_encode(['mensagem' => 'Usuário bloqueado temporariamente. Tente novamente em 15 minutos.']);
+            //Adicionar uma mensagem de quantos minutos faltam para o desbloqueio no futuro???
             exit;
         }
     } catch(PDOException $e) {
         http_response_code(500);
-        echo json_encode(['mensagem' => 'Erro no servidor: ' . $e->getMessage()]);
+         if($_ENV['APP_ENV'] === 'development') {
+            echo json_encode(['mensagem' => 'Erro no servidor: ' . $e->getMessage()]);
+        } else {
+            echo json_encode(['mensagem' => 'Erro no servidor. Tente novamente mais tarde.']);
+            error_log($e->getMessage()); // Log interno
+        }
+        exit;
     }
-
-    /*Validar se usuário está bloqueado no banco de dados
-    AQUI!!!*/
 
     try {
         $stmtLogin = $conn->prepare("SELECT Id_Cliente, Nome, Senha FROM Clientes WHERE Email = ?");
@@ -109,14 +113,59 @@
                 'token' => $jwt // O token é enviado aqui!
             ]);
         } else {
+            $stmtVerify = $conn->prepare("SELECT Email, Tentativas FROM Tentativas_Login WHERE Email = ?");
+            $stmtVerify->execute([$email]);
+            $verificacao = $stmtVerify->fetch(PDO::FETCH_ASSOC); //PESQUISA isso melhor - Ja entendi isto
+
+            if ($verificacao && $verificacao['Tentativas'] >= 5) {
+                $stmtBlock = $conn->prepare("UPDATE Tentativas_Login SET Bloqueado_Ate = NOW() + INTERVAL 15 MINUTE, Tentativas = 0 WHERE Email = ?");
+                $stmtBlock->execute([$email]);
+
+                http_response_code(429); //Bloqueio por muitas tentativas
+                echo json_encode(['mensagem' => 'Usuário bloqueado temporariamente. Tente novamente em 15 minutos.']);
+                exit;
+            } else {
+                $stmtVerify = $conn->prepare(
+                    "INSERT INTO Tentativas_Login (Email) VALUES (?)
+                    ON DUPLICATE KEY 
+                    UPDATE Tentativas = Tentativas + 1, Ultima_Tentativa = NOW()"
+                );
+                $stmtVerify->execute([$email]);
+
+                /*Fazer verificação para encontrar as tentativas restantes*/
+
+                http_response_code(401); //Não autorizado/crendenciais erradas
+                echo json_encode(['mensagem' => 'Email ou Senha incorretos. Tentativas restantes: ']);
+                exit;
+            }
+
+            /*if($verificacao && $verificacao['Tentativas'] < 5) {
+                $stmtUpdate = $conn->prepare("UPDATE Tentativas_Login SET Tentativas = Tentativas + 1, Ultima_Tentativa = NOW() WHERE Email = ?");
+                $stmtUpdate->execute([$email]);
+
+                echo json_encode(['mensagem' => 'E-mail ou senha incorretos. Tentativas Restante: ' . (5 - ($verificacao['Tentativas'] + 1))]);
+                //Adicionar o http code aqui ou no else principal???
+            } else {
+                $stmtInsert = $conn->prepare("INSERT INTO Tentativas_Login (Email) VALUES (?) ");
+                $stmtInsert->execute([$email]);
+
+                //$verificacao['Tentativas'] não exite no banco, só depois deste INSERT!!!
+                //Como faz a conta com o $verificacao['Tentativas'] se ela não existe?????? 
+                //Fazer outro select depois do insert para pegar o número de tentativas atualizado e mostrar a mensagem correta para o usuário??????
+                echo json_encode(['mensagem' => 'E-mail ou senha incorretos. Tentativas Restante: ' . (5 - $verificacao['Tentativas'])]);
+
+                //Adicionar o http code aqui ou no else principal???
+
+                //Pesquisar e talvez adicionar um ON DUPLICATE KEY UPDATE para esta parte
+                //e no else fazer o bloqueio do usuário por 15 minutos
+            }*/
+
+            
             /*Implementação do Rate Limiting para prevenir ataques de força bruta
             e melhorar a segurança do sistema.
             Se login falhar atualize o contador de tentativas e 
-            bloqueie com 5 erros por 15min
+            bloqueie com 5 erros por 15min ou mais
             AQUI!!!!*/
-
-            http_response_code(401);
-            echo json_encode(['mensagem' => 'E-mail ou senha incorretos']);
         }
 
     } catch (PDOException $e) {

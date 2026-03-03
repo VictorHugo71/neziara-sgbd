@@ -89,7 +89,7 @@
     try {
         $stmtLogin = $conn->prepare("SELECT Id_Cliente, Nome, Senha FROM Clientes WHERE Email = ?");
         $stmtLogin->execute([$email]);
-        $cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+        $cliente = $stmtLogin->fetch(PDO::FETCH_ASSOC);
 
         if ($cliente && password_verify($senha, $cliente['Senha'])) {
             $payload = [
@@ -107,22 +107,25 @@
 
             $jwt = JWT::encode($payload, $key, 'HS256');
 
+            //Limpar Tentativas de senhas anteriores e zerar
+
             http_response_code(200);
             echo json_encode([
                 'mensagem' => 'Login realizado com sucesso',
                 'token' => $jwt // O token é enviado aqui!
             ]);
+            exit;
         } else {
             $stmtVerify = $conn->prepare("SELECT Email, Tentativas FROM Tentativas_Login WHERE Email = ?");
             $stmtVerify->execute([$email]);
             $verificacao = $stmtVerify->fetch(PDO::FETCH_ASSOC); //PESQUISA isso melhor - Ja entendi isto
 
-            if ($verificacao && $verificacao['Tentativas'] >= 5) {
-                $stmtBlock = $conn->prepare("UPDATE Tentativas_Login SET Bloqueado_Ate = NOW() + INTERVAL 15 MINUTE, Tentativas = 0 WHERE Email = ?");
+            if ($verificacao && $verificacao['Tentativas'] >= 5) {                    //Mudar para 15 MINUTE
+                $stmtBlock = $conn->prepare("UPDATE Tentativas_Login SET Bloqueado_Ate = NOW() + INTERVAL 1 MINUTE, Tentativas = 0 WHERE Email = ?");
                 $stmtBlock->execute([$email]);
 
-                http_response_code(429); //Bloqueio por muitas tentativas
-                echo json_encode(['mensagem' => 'Usuário bloqueado temporariamente. Tente novamente em 15 minutos.']);
+                http_response_code(429); //Bloqueio por muitas tentativas               //Mudar para 15 MINUTE
+                echo json_encode(['mensagem' => 'Usuário bloqueado temporariamente. Tente novamente em 1 minuto(s)      .']);
                 exit;
             } else {
                 $stmtVerify = $conn->prepare(
@@ -134,38 +137,16 @@
 
                 /*Fazer verificação para encontrar as tentativas restantes*/
 
+                $stmtTentativas = $conn->prepare("SELECT Tentativas FROM Tentativas_Login WHERE Email =  ?");
+                $stmtTentativas->execute([$email]);
+                $tentativas = $stmtTentativas->fetch(PDO::FETCH_ASSOC); 
+                $tentativasRestantes = 5 - $tentativas['Tentativas'];
+
                 http_response_code(401); //Não autorizado/crendenciais erradas
-                echo json_encode(['mensagem' => 'Email ou Senha incorretos. Tentativas restantes: ']);
+                echo json_encode(['mensagem' => 'Email ou Senha incorretos. Tentativas restantes: '. $tentativasRestantes]);
                 exit;
             }
 
-            /*if($verificacao && $verificacao['Tentativas'] < 5) {
-                $stmtUpdate = $conn->prepare("UPDATE Tentativas_Login SET Tentativas = Tentativas + 1, Ultima_Tentativa = NOW() WHERE Email = ?");
-                $stmtUpdate->execute([$email]);
-
-                echo json_encode(['mensagem' => 'E-mail ou senha incorretos. Tentativas Restante: ' . (5 - ($verificacao['Tentativas'] + 1))]);
-                //Adicionar o http code aqui ou no else principal???
-            } else {
-                $stmtInsert = $conn->prepare("INSERT INTO Tentativas_Login (Email) VALUES (?) ");
-                $stmtInsert->execute([$email]);
-
-                //$verificacao['Tentativas'] não exite no banco, só depois deste INSERT!!!
-                //Como faz a conta com o $verificacao['Tentativas'] se ela não existe?????? 
-                //Fazer outro select depois do insert para pegar o número de tentativas atualizado e mostrar a mensagem correta para o usuário??????
-                echo json_encode(['mensagem' => 'E-mail ou senha incorretos. Tentativas Restante: ' . (5 - $verificacao['Tentativas'])]);
-
-                //Adicionar o http code aqui ou no else principal???
-
-                //Pesquisar e talvez adicionar um ON DUPLICATE KEY UPDATE para esta parte
-                //e no else fazer o bloqueio do usuário por 15 minutos
-            }*/
-
-            
-            /*Implementação do Rate Limiting para prevenir ataques de força bruta
-            e melhorar a segurança do sistema.
-            Se login falhar atualize o contador de tentativas e 
-            bloqueie com 5 erros por 15min ou mais
-            AQUI!!!!*/
         }
 
     } catch (PDOException $e) {

@@ -105,6 +105,11 @@
                 ]
             ];
 
+            //Limpar Tentativas de senhas anteriores e zerar
+            $stmtClear = $conn->prepare("UPDATE Tentativas_Login SET Tentativas = 0, Ultima_Tentativa = NOW(), Bloqueado_Ate = NULL WHERE Email = ?");
+            $stmtClear->execute([$email]);
+            $stmtClean = $stmtClear->fetch(PDO::FETCH_ASSOC);
+
             // Geração do token
             $jwt = JWT::encode($payload, $key, 'HS256');
 

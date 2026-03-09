@@ -108,6 +108,9 @@
             $jwt = JWT::encode($payload, $key, 'HS256');
 
             //Limpar Tentativas de senhas anteriores e zerar
+            $stmtClear = $conn->prepare("UPDATE Tentativas_Login SET Tentativas = 0, Ultima_Tentativa = NOW(), Bloqueado_Ate = NULL WHERE Email = ?");
+            $stmtClear->execute([$email]);
+            $stmtClean = $stmtClear->fetch(PDO::FETCH_ASSOC);
 
             http_response_code(200);
             echo json_encode([
@@ -118,24 +121,22 @@
         } else {
             $stmtVerify = $conn->prepare("SELECT Email, Tentativas FROM Tentativas_Login WHERE Email = ?");
             $stmtVerify->execute([$email]);
-            $verificacao = $stmtVerify->fetch(PDO::FETCH_ASSOC); //PESQUISA isso melhor - Ja entendi isto
+            $verificacao = $stmtVerify->fetch(PDO::FETCH_ASSOC); 
 
-            if ($verificacao && $verificacao['Tentativas'] >= 5) {                    //Mudar para 15 MINUTE
+            if ($verificacao && $verificacao['Tentativas'] >= 5) {                    //Mudar para 15 MINUTE quando em produção
                 $stmtBlock = $conn->prepare("UPDATE Tentativas_Login SET Bloqueado_Ate = NOW() + INTERVAL 1 MINUTE, Tentativas = 0 WHERE Email = ?");
                 $stmtBlock->execute([$email]);
 
-                http_response_code(429); //Bloqueio por muitas tentativas               //Mudar para 15 MINUTE
+                http_response_code(429); //Bloqueio por muitas tentativas               //Mudar para 15 minutos quando em produção  
                 echo json_encode(['mensagem' => 'Usuário bloqueado temporariamente. Tente novamente em 1 minuto(s)      .']);
                 exit;
             } else {
-                $stmtVerify = $conn->prepare(
+                $stmtAddTentativa = $conn->prepare(
                     "INSERT INTO Tentativas_Login (Email) VALUES (?)
                     ON DUPLICATE KEY 
                     UPDATE Tentativas = Tentativas + 1, Ultima_Tentativa = NOW()"
                 );
-                $stmtVerify->execute([$email]);
-
-                /*Fazer verificação para encontrar as tentativas restantes*/
+                $stmtAddTentativa->execute([$email]);
 
                 $stmtTentativas = $conn->prepare("SELECT Tentativas FROM Tentativas_Login WHERE Email =  ?");
                 $stmtTentativas->execute([$email]);
@@ -146,7 +147,6 @@
                 echo json_encode(['mensagem' => 'Email ou Senha incorretos. Tentativas restantes: '. $tentativasRestantes]);
                 exit;
             }
-
         }
 
     } catch (PDOException $e) {

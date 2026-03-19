@@ -18,12 +18,20 @@
         exit;
     }
 
-    // Área de Conexão com o Banco de Dados //
-    $servername = "localhost"; //Nome do Servidor onde está o Banco de Dados
-    $username = "root"; //Usuário para conectar no Banco de Dados
-    $password = ""; //Senha para conectar no Banco de dado(se necessário)
-    $database = "E-commerce"; //Nome do Banco de Dados que quer conectar no servidor
+    require_once __DIR__ . '/../vendor/autoload.php';
+    use Firebase\JWT\JWT;
 
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/..');
+    $dotenv->load();
+    
+    $servername = $_ENV['DB_HOST'];
+    $username = $_ENV['DB_USER'];
+    $password = $_ENV['DB_PASS'];
+    $database = $_ENV['DB_NAME'];
+    
+    if (!preg_match('/^[a-zA-Z0-9_-]+$/', $database)) {
+        die('Nome de banco inválido');
+    }
     try {
         $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
         $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

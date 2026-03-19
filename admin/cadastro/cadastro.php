@@ -19,11 +19,20 @@
         exit;
     }
 
-    // Área de Conexão com o Banco de Dados //
-    $servername = "localhost"; //Nome do Servidor onde está o Banco de Dados
-    $username = "root"; //Usuário para conectar no Banco de Dados
-    $password = ""; //Senha para conectar no Banco de dado(se necessário)
-    $database = "E-commerce"; //Nome do Banco de Dados que quer conectar no servidor
+    require_once __DIR__ . '/../../vendor/autoload.php';
+    use Firebase\JWT\JWT;
+
+    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
+    $dotenv->safeLoad();
+
+    $servername = $_ENV['DB_HOST'];
+    $username = $_ENV['DB_USER'];
+    $password = $_ENV['DB_PASS'];
+    $database = $_ENV['DB_NAME'];
+
+    if (!preg_match('/^[a-zA-Z0-9_-]+$/', $database)) {
+        die('Nome de banco inválido');
+    }
 
     try{ //try de conexão do banco de dados
         $conn = new PDO("mysql:host=$servername;dbname=$database", $username, $password);
@@ -33,14 +42,17 @@
     } catch (PDOException $e) {
         http_response_code(500);
         echo json_encode(["mensagem" => "Erro na conexão com o banco de dados: ". $e -> getMessage()]);
+        exit;
     }
 
 
     $dados = json_decode(file_get_contents("php://input"),true);
 
-    if(!isset($dados['nome'], $dados['email'], $dados['senha'])) { //verifica se os dados existem no JSON enviado pelo front-end
+    if(!isset($dados['nome'], $dados['email'], $dados['senha']) || 
+        empty($dados['nome']) || empty($dados['email']) || empty($dados['senha'])) {
         http_response_code(400);
         echo json_encode(['mensagem' => 'Dados incompletos.']);
+        exit; // ← Importante!
     }
 
     $nome = trim($dados['nome']);
@@ -73,7 +85,7 @@
         $stmt = $conn -> prepare("INSERT INTO Usuarios_Admin (Nome, Email, Senha) VALUES (?, ?, ?)");
         if($stmt -> execute([$nome, $email, $senhaSegura])) {
             http_response_code(201);
-            echo json_encode(['mensagem' => 'Cadastro de Administrado realizado com sucesso']);
+            echo json_encode(['mensagem' => 'Cadastro de Administrador realizado com sucesso']);
         } else {
             http_response_code(500);
             echo json_encode(['mensagem' => 'Erro ao inserir dados']);

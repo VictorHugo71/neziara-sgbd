@@ -21,6 +21,7 @@
 
     require_once __DIR__ . '/../../vendor/autoload.php';
     use Firebase\JWT\JWT;
+    require_once __DIR__ . '/../../jwt/validar-jwt.php';
 
     $dotenv = Dotenv\Dotenv::createImmutable(__DIR__ . '/../..');
     $dotenv->safeLoad();
@@ -45,6 +46,8 @@
         exit;
     }
 
+
+    validarJWT(); // Chama a função para validar o JWT
 
     $dados = json_decode(file_get_contents("php://input"),true);
 

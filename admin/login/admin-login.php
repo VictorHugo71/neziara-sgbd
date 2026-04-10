@@ -96,13 +96,15 @@
                 'iss' => 'http://localhost', // Emissor (sua URL)
                 'aud' => 'http://localhost', // Audiência (sua URL)
                 'iat' => time(), // Hora em que o JWT foi emitido
-                'exp' => time() + (60 * 15), // Tempo de expiração (24 horas)
+                'exp' => time() + (60 * 15), // Tempo de expiração (15 minutos)
                 'data' => [
                     'id' => $admin['Id_Adm'],
                     'nome' => $admin['Nome'],
                     'email' => $email,
                     'papel' => 'admin' // Definindo o papel do usuário
                 ]
+
+                
             ];
 
             //Limpar Tentativas de senhas anteriores e zerar

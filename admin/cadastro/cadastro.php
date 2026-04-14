@@ -1,4 +1,6 @@
 <?php
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
 
     // Permite os métodos HTTP
     header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
@@ -47,7 +49,13 @@
     }
 
 
-    validarJWT(); // Chama a função para validar o JWT
+    $dadosJWT = validarJWT(); // Chama a função para validar o JWT
+
+    if ($dadosJWT['papel'] !== 'admin') {
+        http_response_code(403);
+        echo json_encode(['mensagem' => 'Acesso negado. Apenas administradores podem acessar este recurso.']);
+        exit;
+    }
 
     $dados = json_decode(file_get_contents("php://input"),true);
 
@@ -73,7 +81,7 @@
         $stmt -> execute([$email]);
         if($stmt -> fetch(PDO::FETCH_ASSOC)) {
             http_response_code(409);
-            echo json_encode(['mensagem' => 'Este email já esta cadastrado']);
+            echo json_encode(['mensagem' => 'Este email de administrador já esta cadastrado']);
             exit;
         }
     } catch(PDOException $e) {

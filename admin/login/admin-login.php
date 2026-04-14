@@ -159,10 +159,12 @@
         if ($_ENV['APP_ENV'] === 'development') {
             echo json_encode(['mensagem' => 'Erro no servidor: ' . $e->getMessage()]);
             //Em desenvolvimento exponha detalhes para facilitar a depuração
+            exit;
         } else {
             echo json_encode(['mensagem' => 'Erro no servidor. Por favor, tente novamente mais tarde.']);
             //Erro no log para análise posterior, sem expor detalhes ao usuário
             error_log($e->getMessage());
+            exit;
         }
     }
 ?>

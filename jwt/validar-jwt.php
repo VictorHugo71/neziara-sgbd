@@ -1,4 +1,8 @@
 <?php
+    ini_set('log_errors', 'On');
+    ini_set('error_reporting', E_ALL);
+    ini_set('error_log', __DIR__ . '/../php_errors.log');
+
     require_once __DIR__ . '/../vendor/autoload.php';
     use Firebase\JWT\JWT;
     use Firebase\JWT\Key;
@@ -11,9 +15,7 @@
         // Acessa a chave do arquivo .env
         $key = $_ENV['JWT_SECRET'];
         try{
-            //$authorizationHeader = $_SERVER['HTTP_AUTHORIZATION'] ?? '';
-            $authorizationHeader = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOi8vbG9jYWxob3N0IiwiYXVkIjoiaHR0cDovL2xvY2FsaG9zdCIsImlhdCI6MTc3NTc3OTY0MiwiZXhwIjoxNzc1NzgwNTQyLCJkYXRhIjp7ImlkIjoxLCJub21lIjoiVmljdG9yIEh1Z28gRnJlaXRhcyBEaWFzIiwiZW1haWwiOiJmcmVpdGF2aXRvckBob3RtYWlsLmNvbS5iciIsInBhcGVsIjoiYWRtaW4ifX0.pCE0gkraFBcM_6o65o2gKytvvwuu_v-ntp_d1y8ctAQ';
-            echo 'Header de autorização: ', $authorizationHeader;
+            $authorizationHeader = getallheaders()['Authorization'] ?? '';
         
             if (!$authorizationHeader) {
                 http_response_code(401);
@@ -21,9 +23,7 @@
                 exit;
             }
 
-
             $token = str_replace('Bearer ', '', $authorizationHeader);
-            echo 'Token extraído: ', $token;
 
             if (empty($token)) {
                 http_response_code(400);
@@ -32,10 +32,6 @@
             }
 
             $decoded = JWT::decode($token, new Key ($key, 'HS256'));
-            echo ( $decoded->data->id);
-            echo ( $decoded->data->nome);
-            echo ( $decoded->data->email);
-            echo ( $decoded->data->papel);
 
             return [
                 "id" => $decoded->data->id,
@@ -48,34 +44,26 @@
             // Handle expired token: inform the client to refresh or re-login
             http_response_code(401);
             if($_ENV['APP_ENV'] === 'development') {
-                echo json_encode(["error" => "Token expired"]);
                 //Trocar o "X" da linha abaixo para o nome do cliente ou sistema específico, para facilitar a identificação do problema durante o desenvolvimento.
                 echo json_encode(['mensagem' => 'Token expirado para o Cliente X: ' . $e->getMessage()]);
+                exit;
             } else {
                 echo json_encode(['mensagem' => 'Token expirado. Atualize seu token ou faça login novamente.']);
                 error_log($e->getMessage()); // Log interno, organizar as mensagens dos logs depois
+                exit;
             } 
-            exit;
         } catch (Exception $e) {
             // Handle other errors (invalid signature, etc.)
             http_response_code(401);
-            echo json_encode(["error" => "Acesso negado"]);
             if($_ENV['APP_ENV'] === 'development') {
                 echo json_encode(['mensagem' => 'Tentativa de acesso com token inválido ' . $e->getMessage()]);
+                exit;
             } else {
                 echo json_encode(['mensagem' => 'Acesso negado. Tente novamente mais tarde.']);
                 error_log($e->getMessage()); // Log interno, Organizar as mensagens dos logs depois
+                exit;
             }
-            exit;
         }
-
-        $resultado = validarJWT();
-        echo "ID: " . $resultado['id'] . "<br>";
-        echo "Nome: " . $resultado['nome'] . "<br>";
-        echo "Email: " . $resultado['email'] . "<br>";
-        echo "Papel: " . $resultado['papel'] . "<br>";
-
-        
 
         /*
             400 Bad Request Requisição malformada Erros de sintaxe, JSON inválido ou falta de campos obrigatórios.
